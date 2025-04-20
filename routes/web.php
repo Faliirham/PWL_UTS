@@ -5,6 +5,7 @@ use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\PositionController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\PerformanceController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -76,4 +77,16 @@ Route::prefix('employee')->group(function () {
     Route::get('/{id}/edit', [EmployeeController::class, 'edit']);
     Route::put('/{id}', [EmployeeController::class, 'update']);
     Route::delete('/{id}', [EmployeeController::class, 'destroy']);
+});
+
+//Route Performance
+Route::prefix('performance')->group(function () {
+    Route::get('/', [PerformanceController::class, 'index']);
+    Route::post('/list', [PerformanceController::class, 'list']); // ini untuk DataTables
+    Route::get('/create', [PerformanceController::class, 'create']);
+    Route::post('/', [PerformanceController::class, 'store']);
+    Route::get('/{id}', [PerformanceController::class, 'show']);
+    Route::get('/{id}/edit', [PerformanceController::class, 'edit']);
+    Route::put('/{id}', [PerformanceController::class, 'update']);
+    Route::delete('/{id}', [PerformanceController::class, 'destroy']);
 });

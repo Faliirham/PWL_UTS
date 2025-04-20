@@ -52,7 +52,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="{{ url('/barang') }}" class="nav-link {{ ($activeMenu == 'penjualan') ? 'active' : '' }}">
+      <a href="{{ url('/performance') }}" class="nav-link {{ ($activeMenu == 'performance') ? 'active' : '' }}">
         <i class="nav-icon fas fa-chart-line"></i> <!-- ganti dengan ikon relevan -->
         <p>Performances</p>
       </a>
