@@ -16,6 +16,18 @@
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
 
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label>Filter Kota</label>
+                <select id="filter_city" class="form-control">
+                    <option value="">Semua Kota</option>
+                    @foreach ($cities as $city)
+                        <option value="{{ $city }}">{{ $city }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
         <table class="table table-bordered table-hover table-sm" id="table_branch">
             <thead>
                 <tr>
@@ -23,7 +35,7 @@
                     <th>Nama Cabang</th>
                     <th>Alamat</th>
                     <th>Kota</th>
-                    <th>Telepon</th>
+                    <th>No. Telepon</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -42,34 +54,21 @@
                 url: "{{ url('branch/list') }}",
                 type: "POST",
                 data: function (d) {
-                    // Tambahkan data filter jika diperlukan
+                    d.city = $('#filter_city').val(); // kirim data filter kota
                 }
             },
             columns: [
-                {
-                    data: "DT_RowIndex",
-                    className: "text-center",
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: "name"
-                },
-                {
-                    data: "address"
-                },
-                {
-                    data: "city"
-                },
-                {
-                    data: "phone"
-                },
-                {
-                    data: "aksi",
-                    orderable: false,
-                    searchable: false
-                }
+                { data: "DT_RowIndex", className: "text-center", orderable: false, searchable: false },
+                { data: "name" },
+                { data: "address" },
+                { data: "city" },
+                { data: "phone" },
+                { data: "aksi", orderable: false, searchable: false }
             ]
+        });
+
+        $('#filter_city').on('change', function () {
+            dataBranch.ajax.reload();
         });
     });
 </script>

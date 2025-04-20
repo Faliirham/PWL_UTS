@@ -21,12 +21,19 @@ class BranchController extends Controller
 
         $activeMenu = 'branch';
 
-        return view('branch.index', compact('breadcrumb', 'page', 'activeMenu'));
+        // Ambil daftar kota unik untuk filter
+        $cities = Branch::select('city')->distinct()->pluck('city');
+
+        return view('branch.index', compact('breadcrumb', 'page', 'activeMenu', 'cities'));
     }
 
     public function list(Request $request)
     {
         $branches = Branch::query();
+
+        if ($request->city) {
+            $branches->where('city', $request->city);
+        }
 
         return DataTables::of($branches)
             ->addIndexColumn()
