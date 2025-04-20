@@ -3,6 +3,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\PositionController;
+use App\Http\Controllers\BranchController;
+use App\Http\Controllers\EmployeeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -53,8 +55,6 @@ Route::group(['prefix' => 'position'], function () {
 });
 
 //Route Branch
-use App\Http\Controllers\BranchController;
-
 Route::prefix('branch')->group(function () {
     Route::get('/', [BranchController::class, 'index'])->name('branch.index');
     Route::post('/list', [BranchController::class, 'list'])->name('branch.list');
@@ -64,4 +64,16 @@ Route::prefix('branch')->group(function () {
     Route::get('/{id}/edit', [BranchController::class, 'edit'])->name('branch.edit');
     Route::put('/{id}', [BranchController::class, 'update'])->name('branch.update');
     Route::delete('/{id}', [BranchController::class, 'destroy'])->name('branch.destroy');
+});
+
+//Route Employee
+Route::prefix('employee')->group(function () {
+    Route::get('/', [EmployeeController::class, 'index']);
+    Route::post('/list', [EmployeeController::class, 'list']);
+    Route::get('/create', [EmployeeController::class, 'create']);
+    Route::post('/', [EmployeeController::class, 'store']);
+    Route::get('/{id}', [EmployeeController::class, 'show']);
+    Route::get('/{id}/edit', [EmployeeController::class, 'edit']);
+    Route::put('/{id}', [EmployeeController::class, 'update']);
+    Route::delete('/{id}', [EmployeeController::class, 'destroy']);
 });

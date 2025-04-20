@@ -46,7 +46,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="{{ url('/level') }}" class="nav-link {{ ($activeMenu == 'level') ? 'active' : '' }}">
+      <a href="{{ url('/employee') }}" class="nav-link {{ ($activeMenu == 'employee') ? 'active' : '' }}">
         <i class="nav-icon fas fa-users"></i>
         <p>Employee</p>
       </a>
