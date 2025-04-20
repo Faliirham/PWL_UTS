@@ -84,7 +84,7 @@ $(document).ready(function () {
                 data: "score"
             },
             {
-                data: "notes"
+                data: "evaluation_date"
             },
             {
                 data: "aksi",
