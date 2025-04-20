@@ -1,16 +1,15 @@
 <form action="{{ url('/user/ajax') }}" method="POST" id="form-tambah">
     @csrf
-    <div id="modal-master" class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Tambah Data User</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+                    <span>&times;</span>
                 </button>
             </div>
 
             <div class="modal-body">
-
                 {{-- Nama --}}
                 <div class="form-group">
                     <label>Nama</label>
@@ -31,6 +30,7 @@
                     <input type="password" name="password" id="password" class="form-control" required>
                     <small id="error-password" class="error-text form-text text-danger"></small>
                 </div>
+
                 {{-- Role --}}
                 <div class="form-group">
                     <label>Role</label>
@@ -59,8 +59,8 @@
                 <button type="button" data-dismiss="modal" class="btn btn-warning">Batal</button>
                 <button type="submit" class="btn btn-primary">Simpan</button>
             </div>
-        </div>
-    </div>
+        </div> <!-- End of modal-content -->
+    </div> <!-- End of modal-dialog -->
 </form>
 
 <script>
@@ -80,7 +80,7 @@
                     data: $(form).serialize(),
                     success: function (response) {
                         if (response.status) {
-                            $('#modal-master').modal('hide');
+                            $('#myModal').modal('hide');
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil',
