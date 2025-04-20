@@ -77,7 +77,7 @@ class UserController extends Controller
             'email'     => 'required|email|min:3|unique:m_user,email',
             'password'  => 'required|min:5',
             'role'      => 'required|string',
-            'branch_id' => 'required|integer|exists:m_branch,id'
+            'branch_id' => 'required|integer|exists:m_branches,id'
         ]);
 
         User::create([
@@ -137,7 +137,7 @@ class UserController extends Controller
             'email'     => 'required|email|min:3|unique:m_user,email,' . $id . ',id',
             'password'  => 'nullable|min:5',
             'role'      => 'required|string',
-            'branch_id' => 'required|integer|exists:m_branches,id'
+            'branch_id' => 'required|integer|exists:m_branch,id'
         ]);
 
         $user->name = $request->name;

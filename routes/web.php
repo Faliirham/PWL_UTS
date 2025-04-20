@@ -2,6 +2,7 @@
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\PositionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,4 +38,15 @@ Route::group(['prefix' => 'user'], function () {
     Route::get('/{id}/edit', [UserController::class, 'edit']);
     Route::put('/{id}', [UserController::class, 'update']);
     Route::delete('/{id}', [UserController::class, 'destroy']);
+});
+
+Route::group(['prefix' => 'position'], function () {
+    Route::get('/', [PositionController::class, 'index']);
+    Route::post('/list', [PositionController::class, 'list']);
+    Route::get('/create', [PositionController::class, 'create']);
+    Route::post('/', [PositionController::class, 'store']);
+    Route::get('/{id}', [PositionController::class, 'show']);
+    Route::get('/{id}/edit', [PositionController::class, 'edit']);
+    Route::put('/{id}', [PositionController::class, 'update']);
+    Route::delete('/{id}', [PositionController::class, 'destroy']);
 });

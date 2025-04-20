@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Position extends Model
 {
-    protected $table = 'm_poritions';
+    protected $table = 'm_positions';
     protected $primaryKey = 'id';
     protected $fillable = ['name', 'description'];
 

@@ -31,7 +31,7 @@
       </a>
     </li>
     <li class="nav-item">
-      <a href="{{ url('/kategori') }}" class="nav-link {{ ($activeMenu == 'kategori') ? 'active' : '' }}">
+      <a href="{{ url('/position') }}" class="nav-link {{ ($activeMenu == 'position') ? 'active' : '' }}">
         <i class="nav-icon fas fa-briefcase"></i>
         <p>Position</p>
       </a>
