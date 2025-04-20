@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Employees extends Model
 {
+
+    protected $table = 'm_employees';
+    protected $primaryKey = 'id';
     protected $fillable = ['branch_id', 'position_id', 'name', 'email', 'phone', 'hire_date', 'status'];
 
     public function branch()

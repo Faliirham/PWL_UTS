@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Performance extends Model
 {
+    protected $table = 'm_performance';
+    protected $primaryKey = 'id';
     protected $fillable = ['employee_id', 'evaluator_id', 'score', 'notes', 'evaluation_date'];
 
     public function employee()

@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class User extends Model
 {
+    protected $table = 'm_user';
+    protected $primaryKey = 'id';
     protected $fillable = ['name', 'email', 'password', 'role', 'branch_id'];
 
     public function branch()
