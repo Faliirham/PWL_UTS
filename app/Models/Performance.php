@@ -13,7 +13,7 @@ class Performance extends Model
 
     public function employee()
     {
-        return $this->belongsTo(Employees::class);
+        return $this->belongsTo(Employees::class,);
     }
 
     public function evaluator()

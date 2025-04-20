@@ -57,47 +57,47 @@
 @push('js')
 <script>
     var dataPerformance;
-    $(document).ready(function () {
-        dataPerformance = $('#table_performance').DataTable({
-            serverSide: true,
-            ajax: {
-                url: "{{ url('performance/list') }}",
-                type: "POST",
-                data: function (d) {
-                    d.branch_id = $('#branch_id').val(); // Kirim branch_id ke server
-                }
+$(document).ready(function () {
+    dataPerformance = $('#table_performance').DataTable({
+        serverSide: true,
+        ajax: {
+            url: "{{ url('performance/list') }}",
+            type: "POST",
+            data: function (d) {
+                d.branch_id = $('#branch_id').val(); // Kirim branch_id ke server
+            }
+        },
+        columns: [
+            {
+                data: "DT_RowIndex",
+                className: "text-center",
+                orderable: false,
+                searchable: false
             },
-            columns: [
-                {
-                    data: "DT_RowIndex",
-                    className: "text-center",
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: "employee.name" // Menampilkan nama karyawan
-                },
-                {
-                    data: "evaluator.name" // Menampilkan nama evaluator
-                },
-                {
-                    data: "score"
-                },
-                {
-                    data: "notes"
-                },
-                {
-                    data: "aksi",
-                    orderable: false,
-                    searchable: false
-                }
-            ]
-        });
-
-        // Memuat ulang data ketika filter cabang berubah
-        $('#branch_id').on('change', function () {
-            dataPerformance.ajax.reload();
-        });
+            {
+                data: "employee_name" // Menampilkan nama karyawan
+            },
+            {
+                data: "evaluator_name" // Menampilkan nama evaluator
+            },
+            {
+                data: "score"
+            },
+            {
+                data: "notes"
+            },
+            {
+                data: "aksi",
+                orderable: false,
+                searchable: false
+            }
+        ]
     });
+
+    // Memuat ulang data ketika filter cabang berubah
+    $('#branch_id').on('change', function () {
+        dataPerformance.ajax.reload();
+    });
+});
 </script>
 @endpush

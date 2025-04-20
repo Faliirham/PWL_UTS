@@ -32,8 +32,8 @@ class PerformanceController extends Controller
 
 
     public function list(Request $request)
-    {
-    $performances = Performance::query();
+{
+    $performances = Performance::with(['employee', 'evaluator']); // Pastikan relasi sudah dimuat
 
     // Filter berdasarkan branch_id jika ada
     if ($request->has('branch_id') && $request->branch_id != '') {
@@ -52,10 +52,15 @@ class PerformanceController extends Controller
                 '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Yakin ingin hapus data ini?\')">Hapus</button></form>';
             return $btn;
         })
+        ->addColumn('employee_name', function ($performance) {
+            return $performance->employee->name; // Menampilkan nama karyawan
+        })
+        ->addColumn('evaluator_name', function ($performance) {
+            return $performance->evaluator->name; // Menampilkan nama evaluator
+        })
         ->rawColumns(['aksi'])
         ->make(true);
-    }
-
+}
     public function create()
     {
         $breadcrumb = (object)[
