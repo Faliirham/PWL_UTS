@@ -26,7 +26,7 @@ Route::get('/', [WelcomeController::class, 'index']);
 // Route::post('login', [LoginController::class, 'login']);
 // Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
-
+//Route User
 Route::group(['prefix' => 'user'], function () {
     Route::get('/', [UserController::class, 'index']);
     Route::post('/list', [UserController::class, 'list']);
@@ -40,6 +40,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::delete('/{id}', [UserController::class, 'destroy']);
 });
 
+//Route Position
 Route::group(['prefix' => 'position'], function () {
     Route::get('/', [PositionController::class, 'index']);
     Route::post('/list', [PositionController::class, 'list']);
@@ -49,4 +50,18 @@ Route::group(['prefix' => 'position'], function () {
     Route::get('/{id}/edit', [PositionController::class, 'edit']);
     Route::put('/{id}', [PositionController::class, 'update']);
     Route::delete('/{id}', [PositionController::class, 'destroy']);
+});
+
+//Route Branch
+use App\Http\Controllers\BranchController;
+
+Route::prefix('branch')->group(function () {
+    Route::get('/', [BranchController::class, 'index'])->name('branch.index');
+    Route::post('/list', [BranchController::class, 'list'])->name('branch.list');
+    Route::get('/create', [BranchController::class, 'create'])->name('branch.create');
+    Route::post('/', [BranchController::class, 'store'])->name('branch.store');
+    Route::get('/{id}', [BranchController::class, 'show'])->name('branch.show');
+    Route::get('/{id}/edit', [BranchController::class, 'edit'])->name('branch.edit');
+    Route::put('/{id}', [BranchController::class, 'update'])->name('branch.update');
+    Route::delete('/{id}', [BranchController::class, 'destroy'])->name('branch.destroy');
 });

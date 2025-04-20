@@ -40,7 +40,7 @@
     <!-- Store -->
     <li class="nav-header">Store</li>
     <li class="nav-item">
-      <a href="{{ url('/stok') }}" class="nav-link {{ ($activeMenu == 'stok') ? 'active' : '' }}">
+      <a href="{{ url('/branch') }}" class="nav-link {{ ($activeMenu == 'branch') ? 'active' : '' }}">
         <i class="nav-icon fas fa-store"></i>
         <p>Branch</p>
       </a>
