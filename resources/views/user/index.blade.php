@@ -91,7 +91,7 @@
                     data: "role"
                 },
                 {
-                    data: "branch.name", // pakai relasi branch
+                    data: "branch", // pakai relasi branch
                     defaultContent: "-"
                 },
                 {

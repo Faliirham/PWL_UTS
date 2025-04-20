@@ -32,7 +32,7 @@
             </tr>
             <tr>
                 <th>Cabang</th>
-                <td>{{ $user->branch->name ?? '-' }}</td>
+                <td>{{ $user->branch->name ?? 'Branch Tidak Ditemukan' }}</td>
             </tr>
             <tr>
                 <th>Password</th>
