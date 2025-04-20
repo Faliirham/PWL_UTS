@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\Performance;
 use App\Models\Employees;
 use App\Models\User;
@@ -12,39 +13,47 @@ class PerformanceController extends Controller
 {
     public function index()
     {
-        $breadcrumb = (object)[
-            'title' => 'Daftar Penilaian Kinerja',
-            'list' => ['Home', 'Performance']
-        ];
-    
-        $page = (object)[
-            'title' => 'Daftar Penilaian Kinerja'
-        ];
-    
-        $activeMenu = 'performance';
-    
-        // Ambil data karyawan untuk filter
-        $employees = Employees::all(); // Sesuaikan dengan model karyawan yang ada di aplikasi kamu
-    
-        return view('performance.index', compact('breadcrumb', 'page', 'activeMenu', 'employees'));
-    }    
+    $breadcrumb = (object)[
+        'title' => 'Daftar Penilaian Kinerja',
+        'list' => ['Home', 'Performance']
+    ];
+
+    $page = (object)[
+        'title' => 'Daftar Penilaian Kinerja Karyawan'
+    ];
+
+    $activeMenu = 'performance';
+
+    // Ambil semua cabang untuk filter
+    $branches = Branch::all();
+
+    return view('performance.index', compact('breadcrumb', 'page', 'activeMenu', 'branches'));
+    }
+
 
     public function list(Request $request)
     {
-        $performances = Performance::with(['employee', 'evaluator'])->get();
+    $performances = Performance::query();
 
-        return DataTables::of($performances)
-            ->addIndexColumn()
-            ->addColumn('aksi', function ($performance) {
-                $btn = '<a href="' . url('/performance/' . $performance->id) . '" class="btn btn-info btn-sm">Detail</a> ';
-                $btn .= '<a href="' . url('/performance/' . $performance->id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
-                $btn .= '<form class="d-inline-block" method="POST" action="' . url('/performance/' . $performance->id) . '">' . 
-                    csrf_field() . method_field('DELETE') . 
-                    '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Yakin ingin hapus penilaian ini?\')">Hapus</button></form>';
-                return $btn;
-            })
-            ->rawColumns(['aksi'])
-            ->make(true);
+    // Filter berdasarkan branch_id jika ada
+    if ($request->has('branch_id') && $request->branch_id != '') {
+        $performances->whereHas('employee', function($query) use ($request) {
+            $query->where('branch_id', $request->branch_id);
+        });
+    }
+
+    return DataTables::of($performances)
+        ->addIndexColumn()
+        ->addColumn('aksi', function ($performance) {
+            $btn = '<a href="' . url('/performance/' . $performance->id) . '" class="btn btn-info btn-sm">Detail</a> ';
+            $btn .= '<a href="' . url('/performance/' . $performance->id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
+            $btn .= '<form class="d-inline-block" method="POST" action="' . url('/performance/' . $performance->id) . '">' . 
+                csrf_field() . method_field('DELETE') . 
+                '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Yakin ingin hapus data ini?\')">Hapus</button></form>';
+            return $btn;
+        })
+        ->rawColumns(['aksi'])
+        ->make(true);
     }
 
     public function create()

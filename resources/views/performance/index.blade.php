@@ -20,19 +20,19 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group row">
-                        <label class="col-1 control-label col-form-label">Filter:</label>
+                        <label class="col-1 control-label col-form-label">Filter Cabang:</label>
                         <div class="col-3">
-                            <select class="form-control" id="employee_id" name="employee_id">
-                                <option value="">- Semua Karyawan - </option>
-                                @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                            <select class="form-control" id="branch_id" name="branch_id">
+                                <option value="">- Semua Cabang -</option>
+                                @foreach($branches as $branch)
+                                    <option value="{{ $branch->id }}">{{ $branch->name }}</option>
                                 @endforeach
                             </select>
-                            <small class="form-text text-muted">Karyawan</small>
+                            <small class="form-text text-muted">Cabang Karyawan</small>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>            
 
             <table class="table table-bordered table-striped table-hover table-sm" id="table_performance">
                 <thead>
@@ -56,13 +56,6 @@
 
 @push('js')
 <script>
-    function modalAction(element) {
-        let url = typeof element === "string" ? element : element.getAttribute("data-url");
-        $('#myModal').load(url, function () {
-            $('#myModal').modal('show');
-        });
-    }
-
     var dataPerformance;
     $(document).ready(function () {
         dataPerformance = $('#table_performance').DataTable({
@@ -71,7 +64,7 @@
                 url: "{{ url('performance/list') }}",
                 type: "POST",
                 data: function (d) {
-                    d.employee_id = $('#employee_id').val();
+                    d.branch_id = $('#branch_id').val(); // Kirim branch_id ke server
                 }
             },
             columns: [
@@ -82,16 +75,16 @@
                     searchable: false
                 },
                 {
-                    data: "employee.name"
+                    data: "employee.name" // Menampilkan nama karyawan
                 },
                 {
-                    data: "evaluator.name"
+                    data: "evaluator.name" // Menampilkan nama evaluator
                 },
                 {
                     data: "score"
                 },
                 {
-                    data: "evaluation_date"
+                    data: "notes"
                 },
                 {
                     data: "aksi",
@@ -101,7 +94,8 @@
             ]
         });
 
-        $('#employee_id').on('change', function () {
+        // Memuat ulang data ketika filter cabang berubah
+        $('#branch_id').on('change', function () {
             dataPerformance.ajax.reload();
         });
     });
