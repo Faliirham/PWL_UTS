@@ -4,8 +4,9 @@
 <div class="card card-outline card-primary">
     <div class="card-header">
         <h3 class="card-title">{{ $page->title }}</h3>
-        <div class="card-tools">
-            <a href="{{ url('position/create') }}" class="btn btn-sm btn-primary mt-1">Tambah</a>
+        <<div class="card-tools">
+            <a class="btn btn-sm btn-primary mt-1" href="{{ url('position/create') }}">Tambah</a>
+            <button class="btn btn-sm btn-success mt-1" onclick="modalAction('{{ url('position/create_ajax')}}')">Tambah Ajax</button>
         </div>
     </div>
     <div class="card-body">

@@ -22,21 +22,26 @@ class PositionController extends Controller
 
         $activeMenu = 'position';
 
-        return view('positions.index', compact('breadcrumb', 'page', 'activeMenu'));
+        return view('position.index', compact('breadcrumb', 'page', 'activeMenu'));
     }
 
     public function list(Request $request)
     {
-        $positions = Position::query();
+        $position = Position::query();
 
-        return DataTables::of($positions)
+        return DataTables::of($position)
             ->addIndexColumn()
             ->addColumn('aksi', function ($position) {
-                $btn = '<a href="' . url('/position/' . $position->id) . '" class="btn btn-info btn-sm">Detail</a> ';
-                $btn .= '<a href="' . url('/position/' . $position->id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
-                $btn .= '<form class="d-inline-block" method="POST" action="' . url('/position/' . $position->id) . '">' .
-                    csrf_field() . method_field('DELETE') .
-                    '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Yakin ingin hapus jabatan ini?\')">Hapus</button></form>';
+                // $btn = '<a href="' . url('/position/' . $position->id) . '" class="btn btn-info btn-sm">Detail</a> ';
+                // $btn .= '<a href="' . url('/position/' . $position->id . '/edit') . '" class="btn btn-warning btn-sm">Edit</a> ';
+                // $btn .= '<form class="d-inline-block" method="POST" action="' . url('/position/' . $position->id) . '">' .
+                //     csrf_field() . method_field('DELETE') .
+                //     '<button type="submit" class="btn btn-danger btn-sm" onclick="return confirm(\'Yakin ingin hapus jabatan ini?\')">Hapus</button></form>';
+                $btn = '<button onclick="modalAction(\''.url('/position/' . $position->id .'/show_ajax').'\')" class="btn btn-info btn-sm">Detail</button> ';
+
+                $btn .= '<button onclick="modalAction(\''.url('/position/' . $position->id .'/edit_ajax').'\')" class="btn btn-warning btn-sm">Edit</button> ';
+
+                $btn .= '<button onclick="modalAction(\''.url('/position/' . $position->id .'/delete_ajax').'\')" class="btn btn-danger btn-sm">Hapus</button> ';
                 return $btn;
             })
             ->rawColumns(['aksi'])
@@ -56,7 +61,7 @@ class PositionController extends Controller
 
         $activeMenu = 'position';
 
-        return view('positions.create', compact('breadcrumb', 'page', 'activeMenu'));
+        return view('position.create', compact('breadcrumb', 'page', 'activeMenu'));
     }
 
     public function store(Request $request)
@@ -89,7 +94,19 @@ class PositionController extends Controller
 
         $activeMenu = 'position';
 
-        return view('positions.show', compact('breadcrumb', 'page', 'position', 'activeMenu'));
+        return view('position.show', compact('breadcrumb', 'page', 'position', 'activeMenu'));
+    }
+
+    public function show_ajax(string $id)
+    {
+        $position = Position::find($id);
+        
+        // Load relasi employees jika ditemukan
+        if ($position) {
+            $position->load('employees');
+        }
+        
+        return view('position.show_ajax', ['position' => $position]);
     }
 
     public function edit(string $id)
@@ -107,7 +124,7 @@ class PositionController extends Controller
 
         $activeMenu = 'position';
 
-        return view('positions.edit', compact('breadcrumb', 'page', 'position', 'activeMenu'));
+        return view('position.edit', compact('breadcrumb', 'page', 'position', 'activeMenu'));
     }
 
     public function update(Request $request, string $id)
@@ -140,5 +157,144 @@ class PositionController extends Controller
         } catch (\Illuminate\Database\QueryException $e) {
             return redirect('/position')->with('error', 'Jabatan gagal dihapus karena masih terhubung dengan data lain');
         }
+    }
+
+    public function create_ajax()
+    {
+        return view('position.create_ajax');
+    }
+
+    public function store_ajax(Request $request)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $rules = [
+                'name'        => 'required|string|max:100',
+                'description' => 'nullable|string'
+            ];
+
+            $validator = Validator::make($request->all(), $rules);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'status'   => false,
+                    'message'  => 'Validasi gagal',
+                    'msgField' => $validator->errors(),
+                ]);
+            }
+
+            try {
+                Position::create([
+                    'name'        => $request->name,
+                    'description' => $request->description
+                ]);
+
+                return response()->json([
+                    'status'  => true,
+                    'message' => 'Data posisi berhasil disimpan'
+                ]);
+            } catch (\Exception $e) {
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'Terjadi kesalahan saat menyimpan data'
+                ]);
+            }
+        }
+
+        return redirect('/position');
+    }
+
+    public function edit_ajax(string $id)
+    {
+        $position = Position::find($id);
+        return view('position.edit_ajax', ['position' => $position]);
+    }
+
+    public function update_ajax(Request $request, $id)
+    {
+        // Cek apakah request dari ajax
+        if ($request->ajax() || $request->wantsJson()) {
+            
+            // Aturan validasi
+            $rules = [
+                'name'        => 'required|string|max:100',
+                'description' => 'nullable|string'
+            ];
+
+            // Validasi request
+            $validator = Validator::make($request->all(), $rules);
+
+            // Jika validasi gagal
+            if ($validator->fails()) {
+                return response()->json([
+                    'status'   => false,
+                    'message'  => 'Validasi gagal.',
+                    'msgField' => $validator->errors() // Menunjukkan field mana yang error
+                ]);
+            }
+
+            // Mencari data position berdasarkan ID
+            $position = Position::find($id);
+            
+            // Jika position ditemukan
+            if ($position) {
+                // Update data position dengan data yang valid
+                $position->update([
+                    'name'        => $request->name,
+                    'description' => $request->description
+                ]);
+                
+                return response()->json([
+                    'status'  => true,
+                    'message' => 'Data berhasil diupdate'
+                ]);
+            } else {
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'Data posisi tidak ditemukan'
+                ]);
+            }
+        }
+        // Jika bukan ajax, redirect ke halaman utama
+        return redirect('/position');
+    }
+
+    public function confirm_ajax(string $id)
+    {
+        $position = Position::find($id);
+        
+        // Load relasi employees jika ditemukan
+        if ($position) {
+            $position->load('employees');
+        }
+        
+        return view('position.delete_ajax', ['position' => $position]);
+    }
+
+    public function delete_ajax(Request $request, $id)
+    {
+        if ($request->ajax() || $request->wantsJson()) {
+            $position = Position::find($id);
+            if ($position) {
+                // Cek apakah posisi memiliki karyawan terkait
+                if ($position->employees && $position->employees->count() > 0) {
+                    return response()->json([
+                        'status'  => false,
+                        'message' => 'Posisi ini memiliki karyawan terkait. Hapus karyawan terlebih dahulu.'
+                    ]);
+                }
+                
+                $position->delete();
+                return response()->json([
+                    'status'  => true,
+                    'message' => 'Data berhasil dihapus'
+                ]);
+            } else {
+                return response()->json([
+                    'status'  => false,
+                    'message' => 'Data tidak ditemukan'
+                ]);
+            }
+        }
+        return redirect('/position');
     }
 }

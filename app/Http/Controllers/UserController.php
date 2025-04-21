@@ -313,4 +313,16 @@ class UserController extends Controller
         }
         return redirect('/user');
     }
+    public function show_ajax($id)
+    {
+        $user = User::find($id);
+        
+        if ($user) {
+            $user->load('branch');
+        }
+        $data = [
+            'user' => $user
+        ];
+        return view('user.show_ajax', $data);
+    }
 }

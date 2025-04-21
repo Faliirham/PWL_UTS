@@ -37,6 +37,7 @@ Route::group(['prefix' => 'user'], function () {
     Route::post('/', [UserController::class, 'store']);
     Route::get('/create_ajax', [UserController::class, 'create_ajax']);
     Route::post('/ajax', [UserController::class, 'store_ajax']);
+    Route::get('/{id}/show_ajax', [UserController::class, 'show_ajax']);
     Route::get('/{id}', [UserController::class, 'show']);
     Route::get('/{id}/edit', [UserController::class, 'edit']);
     Route::put('/{id}', [UserController::class, 'update']);
@@ -53,9 +54,16 @@ Route::group(['prefix' => 'position'], function () {
     Route::post('/list', [PositionController::class, 'list']);
     Route::get('/create', [PositionController::class, 'create']);
     Route::post('/', [PositionController::class, 'store']);
+    Route::get('/create_ajax', [PositionController::class, 'create_ajax']);
+    Route::post('/ajax', [PositionController::class, 'store_ajax']);
+    Route::get('/{id}/show_ajax', [PositionController::class, 'show_ajax']);
     Route::get('/{id}', [PositionController::class, 'show']);
     Route::get('/{id}/edit', [PositionController::class, 'edit']);
     Route::put('/{id}', [PositionController::class, 'update']);
+    Route::get('/{id}/edit_ajax', [PositionController::class, 'edit_ajax']);
+    Route::put('/{id}/update_ajax', [PositionController::class, 'update_ajax']);
+    Route::get('/{id}/delete_ajax', [PositionController::class, 'confirm_ajax']);
+    Route::delete('/{id}/delete_ajax', [PositionController::class, 'delete_ajax']);
     Route::delete('/{id}', [PositionController::class, 'destroy']);
 });
 
